@@ -12,20 +12,30 @@ export class repository {
    * @returns Uma lista (array) dos objetos da API.
    */
   async list() {
-    const response = await fetch(this.url);
-    const data = response.json();
-    return data;
+    try {
+      const response = await fetch(this.url);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
 
   /**
    * Busca um objeto especifico da API e o retorna.
-   * @param {number} id Id do objeto a ser buscado.
+   * @param {string} id Id do objeto a ser buscado.
    * @returns O objeto se encontrado ou null.
    */
   async get(id) {
-    const response = await fetch(`${this.url}/${id}`);
-    const data = response.json();
-    return data;
+    try {
+      const response = await fetch(`${this.url}/${id}`);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   /**
