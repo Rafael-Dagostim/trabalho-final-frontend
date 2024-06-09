@@ -1,0 +1,8 @@
+.nav-button {
+  background-color: #e6e6e6;
+  border: 1px solid #b1b1b1;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: -1px;
+}

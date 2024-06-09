@@ -1,0 +1,36 @@
+.page {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  right: 0;
+  background-color: #e6e6e6;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-button-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-button:hover {
+  background-color: #b1b1b1;
+}
+
+.content-area {
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  align-items: center;
+  width: 80%;
+  padding: 8px;
+}
