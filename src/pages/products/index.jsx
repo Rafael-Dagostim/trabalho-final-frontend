@@ -1,120 +1,100 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from "react";
 
-import ProductTable from '../../components/ProductTable'
-import ProductForm from '../../components/ProductForm'
+import { Repository } from "../../shared/repository";
 
-// CRUD COM JSON SERVER
+import ProductTable from "../../components/Product/ProductTable";
+import ProductForm from "../../components/Product/ProductForm";
 
-function Products() {  
-  const [products, setProducts] = useState([]);
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
-  const [edit, setEdit] = useState(false);
+export function Products() {
+  const productFormInitialState = { name: "", price: 0, stock: 0 };
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "set":
+        return { ...state, ...action.obj };
+      case "load":
+        return action.obj;
+      case "reset":
+        return productFormInitialState;
+      default:
+        window.alert(`Evento '${action.type}' não reconhecido!`);
+        return state;
+    }
+  };
 
-  const url = 'http://localhost:3000/products';
+  const [product, dispatch] = useReducer(reducer, productFormInitialState);
+  const [productList, setProductList] = useState([]);
+
+  const productRepository = new Repository("products");
+  const loadProductList = () => productRepository.list().then(setProductList);
 
   useEffect(() => {
-    // Lista todos os produtos:
-    const getProductsList = async() => {
-      const res = await fetch(url);
-      const data = await res.json();
-      setProducts(data);
-    }
-
-    getProductsList();
-
+    loadProductList();
   }, []);
 
-  const clearForm = () => {
-    setName("");
-    setPrice("");
-    setStock("");
-  }
+  const getProductById = async (id) => {
+    const prod = await productRepository.get(id);
 
-  // Busca apenas um produto pelo seu id:
-  const getProductById = async(id) => {
-    // Faz a requisição http
-    const res = await fetch(url + `/${id}`);
-    const data = await res.json();
-    // Carrega os dados no formulário para edição:
-    setName(data.name)
-    setPrice(data.price);
-    setStock(data.stock);
-    setId(data.id);
-
-    // Habilita edição:
-    setEdit(true);
-  }
+    if (!prod) {
+      window.alert(`Produto com id ${id} não encontrado!`);
+      return;
+    }
+    dispatch({ type: "load", obj: prod });
+  };
 
   const saveProduct = async (e) => {
     e.preventDefault();
-    const saveRequestParams = {
-      method: edit ? "PUT" : "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify({ name, price, stock })
-    }
+    const isEdit = !!product.id;
 
-    // Cria url para buscar todos ou apenas um produto
-    const save_url = edit ? url + `/${id}` : url;
+    if (isEdit) await productRepository.update(product.id, product);
+    else await productRepository.create(product);
 
-    // Faz a requisição http
-    const res = await fetch(save_url, saveRequestParams);
+    dispatch({ type: "reset" });
+    await loadProductList();
+  };
 
-    // Se for cadastro de produto novo:
-    if(!edit) { 
-      const newProduct = await res.json();
-      // Atualização da tabela:
-      setProducts((prevProducts) => [...prevProducts, newProduct]);
-    }
+  const deleteProduct = async (id) => {
+    await productRepository.delete(id);
+    await loadProductList();
+  };
 
-    // Se for edição/atualização de produto já cadastrado:
-    if(edit) {       
-      const editedProduct = await res.json();
-      // Atualização da tabela:
-      const editedProductIndex = products.findIndex(prod => prod.id === id);
-      products[editedProductIndex] = editedProduct;
-      setProducts(products);
-   }
+  const handleName = (e) => {
+    dispatch({ type: "set", obj: { name: e.target.value } });
+  };
+  const handlePrice = (e) => {
+    dispatch({ type: "set", obj: { price: Number(e.target.value) } });
+  };
+  const handleStock = (e) => {
+    dispatch({ type: "set", obj: { stock: Number(e.target.value) } });
+  };
 
-    clearForm();
-    setEdit(false);
-  }
-
-  const deleteProduct = async(id) => {
-    // Faz a requisição http
-    const res = await fetch(url + `/${id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json"
-      },
-    });
-
-    const deletedProduct = await res.json();
-    // Atualização da tabela:
-    setProducts(products.filter(prod => prod.id !== deletedProduct.id));
-  }
-
-  // Mudança dos estados ao digitar no formulário:
-  const handleName = (e) => {setName(e.target.value)};
-  const handlePrice = (e) => {setPrice(e.target.value)};
-  const handleStock = (e) => {setStock(e.target.value)};
+  const handleClear = () => dispatch({ type: "reset" });
 
   return (
     <>
-     <h2>CRUD com JSON Server</h2>
-     <div>
-        {
-          products.length > 0 ? <ProductTable products={products} deleteProduct={deleteProduct} editProduct={getProductById} /> : <h3 style={{marginBottom: '30px'}}>Nenhum produto cadastrado...</h3>
-        }
+      <div>
+        {productList.length > 0 ? (
+          <ProductTable
+            products={productList}
+            deleteProduct={deleteProduct}
+            editProduct={getProductById}
+          />
+        ) : (
+          <h3 style={{ marginBottom: "30px" }}>Nenhum produto cadastrado...</h3>
+        )}
       </div>
 
-      <ProductForm name={name} price={price} stock={stock} handleName={handleName} handlePrice={handlePrice} handleStock={handleStock} saveProduct={saveProduct}/>
+      <ProductForm
+        name={product.name}
+        price={product.price}
+        stock={product.stock}
+        handleName={handleName}
+        handlePrice={handlePrice}
+        handleStock={handleStock}
+        onSaveProduct={saveProduct}
+        onClear={handleClear}
+      />
     </>
-  )
+  );
 }
 
-export default Products
+export default Products;
