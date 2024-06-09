@@ -1,4 +1,4 @@
-export class repository {
+export class Repository {
   /**
    * Rota base da API.
    * @param {string} route
@@ -9,7 +9,7 @@ export class repository {
 
   /**
    * Busca todos os items e devolve em uma lista (array).
-   * @returns Uma lista (array) dos objetos da API.
+   * @returns {Promise<Array<any>>} Uma lista (array) dos objetos da API.
    */
   async list() {
     try {
@@ -25,7 +25,7 @@ export class repository {
   /**
    * Busca um objeto especifico da API e o retorna.
    * @param {string} id Id do objeto a ser buscado.
-   * @returns O objeto se encontrado ou null.
+   * @returns {Promise<any | null>} O objeto se encontrado ou null.
    */
   async get(id) {
     try {
@@ -40,7 +40,7 @@ export class repository {
 
   /**
    * Salva um novo objeto na API.
-   * @param {object} obj Objeto a ser salvo.
+   * @param {*} obj Objeto a ser salvo.
    */
   async create(obj) {
     await fetch(this.url, {
@@ -54,7 +54,7 @@ export class repository {
 
   /**
    * Atualiza um objeto já existente na API.
-   * @param {number} id Id do objeto a ser alterado.
+   * @param {string} id Id do objeto a ser alterado.
    * @param {*} obj Novos dados do objeto.
    */
   async update(id, obj) {
@@ -65,5 +65,21 @@ export class repository {
       },
       body: JSON.stringify(obj),
     });
+  }
+
+  /**
+   * Deleta o objeto existente na API.
+   * @param {string} id Id do objeto a ser deletado.
+   * @returns {any} objeto deletado da API.
+   */
+  async delete(id) {
+    const response = await fetch(`${this.url}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
   }
 }
