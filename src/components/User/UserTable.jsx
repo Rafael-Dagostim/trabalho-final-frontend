@@ -20,7 +20,6 @@ export default function UserTable({ users, deleteUser, editUser }) {
       <table className={classes.table}>
         <thead>
           <tr>
-            {/* { name: "", cpf: 0, sex: "", dateBirth: null, isPayingCostumer: false }; */}
             <th>Cod.</th>
             <th>Nome</th>
             <th>CPF</th>
