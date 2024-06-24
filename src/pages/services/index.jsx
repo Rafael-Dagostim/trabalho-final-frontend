@@ -38,6 +38,7 @@ export function Services() {
 
     if (!service) {
       window.alert(`Serviço com id ${id} não encontrado!`);
+
       return;
     }
     dispatch({ type: "load", obj: service });

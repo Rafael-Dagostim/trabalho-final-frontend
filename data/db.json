@@ -2,20 +2,26 @@
   "products": [
     {
       "name": "Uva",
-      "price": 20,
-      "stock": "30",
+      "price": 2,
+      "stock": 300,
       "id": "630f"
+    },
+    {
+      "id": "1f83",
+      "name": "Teste",
+      "price": 2,
+      "stock": 2
     }
   ],
-  "service": [],
   "user": [
     {
-      "id": "567c",
-      "name": "test",
-      "cpf": "123",
+      "id": "5e6e",
+      "name": "Bruno",
+      "cpf": "10478504942",
       "sex": "M",
-      "dateBirth": "2024-05-30",
+      "dateBirth": "2023-01-01",
       "isPayingCostumer": "true"
     }
-  ]
+  ],
+  "service": []
 }
