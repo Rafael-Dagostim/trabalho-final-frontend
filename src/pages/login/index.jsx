@@ -11,7 +11,7 @@ export default function Login() {
   const [userList, setUserList] = useState([]);
   const loadUserList = () => userRepository.list().then(setUserList);
 
-  const userFormInitialState = { name: "", cpf: 0 };
+  const userFormInitialState = { name: "", cpf: "" };
   const reducer = (state, action) => {
     switch (action.type) {
       case "set":
@@ -64,7 +64,7 @@ export default function Login() {
       <div className="nav">
         <h2>CRUD com JSON Server</h2>
       </div>
-      <div className="content-area">
+      <div className="content-login">
         <h3>Login</h3>
         <form onSubmit={(e) => login(e)}>
           <label className="form-label" htmlFor="nome">

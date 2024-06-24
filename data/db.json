@@ -2,26 +2,36 @@
   "products": [
     {
       "name": "Uva",
-      "price": 2,
+      "price": 20,
       "stock": 300,
       "id": "630f"
-    },
-    {
-      "id": "1f83",
-      "name": "Teste",
-      "price": 2,
-      "stock": 2
     }
   ],
   "user": [
     {
-      "id": "5e6e",
+      "id": "849e",
+      "name": "teste",
+      "cpf": "103",
+      "sex": "F",
+      "dateBirth": "1111-03-20",
+      "isPayingCostumer": false
+    },
+    {
+      "id": "54a8",
       "name": "Bruno",
-      "cpf": "10478504942",
+      "cpf": "6186451184",
       "sex": "M",
-      "dateBirth": "2023-01-01",
-      "isPayingCostumer": "true"
+      "dateBirth": "2003-11-02",
+      "isPayingCostumer": false
     }
   ],
-  "service": []
+  "service": [
+    {
+      "id": "240a",
+      "description": "Serviço",
+      "price": 1234,
+      "openingDate": "2024-06-24",
+      "completionDate": "2024-06-26"
+    }
+  ]
 }

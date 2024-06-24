@@ -18,6 +18,7 @@ export function RouterIndex() {
           <Route path="/services" element={<Services />} />
           <Route path="/users" element={<Users />} />
         </Route>
+        <Route path="*" element={<h1>Página não encontrada</h1>} />
       </RouterRoutes>
     </BrowserRouter>
   );
