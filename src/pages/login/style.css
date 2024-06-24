@@ -1,0 +1,6 @@
+.content-area {
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  align-items: center;
+  width: 80%;
+  padding: 8px;
+}

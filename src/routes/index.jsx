@@ -6,11 +6,13 @@ import NavBar from "../components/NavBar";
 import { routes } from "./routes";
 import Services from "../pages/services";
 import Users from "../pages/users";
+import Login from "../pages/login";
 
 export function RouterIndex() {
   return (
     <BrowserRouter>
       <RouterRoutes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<NavBar routes={routes} />}>
           <Route path="/products" element={<Products />} />
           <Route path="/services" element={<Services />} />

@@ -1,8 +1,8 @@
 import { PropTypes } from "prop-types";
 import { Outlet } from "react-router-dom";
 
-import "./style.css";
 import NavButton from "./components/NavButton";
+import "./style.css";
 
 export default function NavBar({ routes = [] }) {
   return (
