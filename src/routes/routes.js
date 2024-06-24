@@ -6,5 +6,8 @@ export const routes = [
   {
     label: "Usuários",
     path: "users",
-  },
+  }, {
+    label: "Serviços",
+    path: "services",
+  }
 ];

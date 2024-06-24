@@ -2,11 +2,13 @@ import { useState, useEffect, useReducer } from "react";
 
 import { Repository } from "../../shared/repository";
 
-import ProductTable from "../../components/Product/ProductTable";
-import ProductForm from "../../components/Product/ProductForm";
+import ServiceTable from "../../components/Service/ServiceTable";
+import ServiceForm from "../../components/Service/ServiceForm";
 
 export function Services() {
-  const productFormInitialState = { name: "", price: 0, stock: 0 };
+
+  const serviceFormInitialState = { description: "", price: 0, openingDate: null, completionDate: null };
+
   const reducer = (state, action) => {
     switch (action.type) {
       case "set":
@@ -14,57 +16,60 @@ export function Services() {
       case "load":
         return action.obj;
       case "reset":
-        return productFormInitialState;
+        return serviceFormInitialState;
       default:
         window.alert(`Evento '${action.type}' não reconhecido!`);
         return state;
     }
   };
 
-  const [product, dispatch] = useReducer(reducer, productFormInitialState);
-  const [productList, setProductList] = useState([]);
+  const [service, dispatch] = useReducer(reducer, serviceFormInitialState);
+  const [serviceList, setServiceList] = useState([]);
 
-  const productRepository = new Repository("products");
-  const loadProductList = () => productRepository.list().then(setProductList);
+  const serviceRepository = new Repository("service");
+  const loadServiceList = () => serviceRepository.list().then(setServiceList);
 
   useEffect(() => {
-    loadProductList();
+    loadServiceList();
   }, []);
 
-  const getProductById = async (id) => {
-    const prod = await productRepository.get(id);
+  const getServiceById = async (id) => {
+    const service = await serviceRepository.get(id);
 
-    if (!prod) {
-      window.alert(`Produto com id ${id} não encontrado!`);
+    if (!service) {
+      window.alert(`Serviço com id ${id} não encontrado!`);
       return;
     }
-    dispatch({ type: "load", obj: prod });
+    dispatch({ type: "load", obj: service });
   };
 
-  const saveProduct = async (e) => {
+  const saveService = async (e) => {
     e.preventDefault();
-    const isEdit = !!product.id;
+    const isEdit = !!service.id;
 
-    if (isEdit) await productRepository.update(product.id, product);
-    else await productRepository.create(product);
+    if (isEdit) await serviceRepository.update(service.id, service);
+    else await serviceRepository.create(service);
 
     dispatch({ type: "reset" });
-    await loadProductList();
+    await loadServiceList();
   };
 
-  const deleteProduct = async (id) => {
-    await productRepository.delete(id);
-    await loadProductList();
+  const deleteService = async (id) => {
+    await serviceRepository.delete(id);
+    await loadServiceList();
   };
 
-  const handleName = (e) => {
-    dispatch({ type: "set", obj: { name: e.target.value } });
+  const handleDescription = (e) => {
+    dispatch({ type: "set", obj: { description: e.target.value } });
   };
   const handlePrice = (e) => {
     dispatch({ type: "set", obj: { price: Number(e.target.value) } });
   };
-  const handleStock = (e) => {
-    dispatch({ type: "set", obj: { stock: Number(e.target.value) } });
+  const handleOpeningDate = (e) => {
+    dispatch({ type: "set", obj: { openingDate: e.target.value } });
+  };
+  const handleCompletionDate = (e) => {
+    dispatch({ type: "set", obj: { completionDate: e.target.value } });
   };
 
   const handleClear = () => dispatch({ type: "reset" });
@@ -72,26 +77,29 @@ export function Services() {
   return (
     <>
       <div>
-        {productList.length > 0 ? (
-          <ProductTable
-            products={productList}
-            deleteProduct={deleteProduct}
-            editProduct={getProductById}
+        {serviceList.length > 0 ? (
+          <ServiceTable
+            services={serviceList}
+            deleteService={deleteService}
+            editService={getServiceById}
           />
         ) : (
-          <h3 style={{ marginBottom: "30px" }}>Nenhum produto cadastrado...</h3>
+          <h3 style={{ marginBottom: "30px" }}>Nenhum serviço cadastrado...</h3>
         )}
       </div>
-
-      <ProductForm
-        name={product.name}
-        price={product.price}
-        stock={product.stock}
-        handleName={handleName}
+      <ServiceForm
+        completionDate={service.completionDate}
+        openingDate={service.openingDate}
+        description={service.description}
+        price={service.price}
+        
+        handleCompletionDate={handleCompletionDate}
+        handleDescription={handleDescription}
+        handleOpeningDate={handleOpeningDate}
         handlePrice={handlePrice}
-        handleStock={handleStock}
-        onSaveProduct={saveProduct}
         onClear={handleClear}
+
+        onSaveService={saveService}
       />
     </>
   );
