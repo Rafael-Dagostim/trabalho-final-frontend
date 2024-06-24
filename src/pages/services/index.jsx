@@ -37,7 +37,8 @@ export function Services() {
     const service = await serviceRepository.get(id);
 
     if (!service) {
-      window.alert(`Produto com id ${id} não encontrado!`);
+      window.alert(`Serviço com id ${id} não encontrado!`);
+
       return;
     }
     dispatch({ type: "load", obj: service });
